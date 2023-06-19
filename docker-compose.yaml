@@ -5,44 +5,22 @@ services:
     build:
       context: app
       network: host
-    container_name: hubla-app
+    container_name: process-file-app
     ports:
       - 3000:3000
     volumes:
       - .:/home/node/app
     depends_on:
-      - mysql
+      - postgres
       - rabbitmq3
 
-  process-file:
-    build:
-      context: process-file
-      network: host
-    container_name: hubla-process-file
+  postgres:
+    image: postgres
+    restart: always
     ports:
-      - "50051:50051"
-    volumes:
-      - .:/home/node/app
-    depends_on:
-      - mysql
-      - rabbitmq3
-
-  mysql:
-    image: mysql:8.0.33-debian
-    ports:
-      - "3306:3306"
+      - 5432:5432
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: hubla
-
-  rabbitmq3:
-    container_name: "rabbitmq"
-    image: rabbitmq:3.12.0-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER=hubla
-      - RABBITMQ_DEFAULT_PASS=password
-    ports:
-      # AMQP protocol port
-      - '5672:5672'
-      # HTTP management UI
-      - '15672:15672'
+      POSTGRES_DB: develop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      PGDATA: /var/lib/postgresql/data
