@@ -26,6 +26,7 @@
     "@adminjs/sequelize": "^4.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/sequelize": "^10.0.0",
     "adminjs": "^7.0.6",

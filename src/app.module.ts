@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { UsersModule } from './users/users.module';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -31,12 +32,13 @@ const authenticate = async (email: string, password: string) => {
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
       port: 5432,
       username: 'postgres',
       password: 'secret',
       database: 'develop',
-      models: [],
+      autoLoadModels: true,
+      synchronize: true,
     }),
     // AdminJS version 7 is ESM-only. In order to import it, you have to use dynamic imports.
     import('@adminjs/nestjs').then(({ AdminModule }) =>
@@ -59,6 +61,7 @@ const authenticate = async (email: string, password: string) => {
         }),
       }),
     ),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
