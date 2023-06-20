@@ -2,9 +2,7 @@ version: '3'
 
 services:
   app:
-    build:
-      context: app
-      network: host
+    build: .
     container_name: process-file-app
     ports:
       - 3000:3000
@@ -12,7 +10,6 @@ services:
       - .:/home/node/app
     depends_on:
       - postgres
-      - rabbitmq3
 
   postgres:
     image: postgres
