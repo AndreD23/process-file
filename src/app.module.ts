@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
+import { TransactionsModule } from './transactions/transactions.module';
+import { Transaction } from './transactions/entities/transaction.entity';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -46,7 +49,7 @@ const authenticate = async (email: string, password: string) => {
         useFactory: () => ({
           adminJsOptions: {
             rootPath: '/admin',
-            resources: [],
+            resources: [User, Transaction],
           },
           auth: {
             authenticate,
@@ -62,6 +65,7 @@ const authenticate = async (email: string, password: string) => {
       }),
     ),
     UsersModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

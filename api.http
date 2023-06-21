@@ -8,3 +8,15 @@ Content-Type: application/json
 {
     "name": "André Dorneles"
 }
+
+
+### Get Transactions
+GET http://localhost:3000/transactions
+
+### Create Transaction
+POST http://localhost:3000/transactions
+Content-Type: application/json
+
+{
+  "status": "PENDING"
+}
