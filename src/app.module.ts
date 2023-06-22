@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
-import { TransactionsFileModule } from './transactions/transactions-file/transactions-file.module';
 import { TransactionFile } from './transactions/transactions-file/entities/transaction-file.entity';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from '@nestjs/config';
+import { TransactionsModule } from './transactions/transactions.module';
+import { CreatorsModule } from './creators/creators.module';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -68,13 +69,14 @@ const authenticate = async (email: string, password: string) => {
       }),
     ),
     UsersModule,
-    TransactionsFileModule,
+    TransactionsModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT),
       },
     }),
+    CreatorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
