@@ -7,6 +7,7 @@ import { User } from './users/entities/user.entity';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/entities/transaction.entity';
 import { BullModule } from '@nestjs/bull';
+import { ConfigModule } from '@nestjs/config';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -21,8 +22,8 @@ async function registerAdapterNest() {
 registerAdapterNest();
 
 const DEFAULT_ADMIN = {
-  email: 'admin@example.com',
-  password: 'password',
+  email: process.env.ADMINJS_EMAIL,
+  password: process.env.ADMINJS_PASS,
 };
 
 const authenticate = async (email: string, password: string) => {
@@ -32,15 +33,18 @@ const authenticate = async (email: string, password: string) => {
   return null;
 };
 
+console.log(process.env.DB_DIALECT);
+
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'postgres',
-      port: 5432,
-      username: 'postgres',
-      password: 'secret',
-      database: 'develop',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
       autoLoadModels: true,
       synchronize: true,
     }),
@@ -69,8 +73,8 @@ const authenticate = async (email: string, password: string) => {
     TransactionsModule,
     BullModule.forRoot({
       redis: {
-        host: 'redis',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
       },
     }),
   ],
