@@ -9,6 +9,7 @@ import {
 import { TransactionsFileService } from './transactions-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import 'dotenv/config';
 
 // Upload folder config
 // Handle location folder and file name to avoid files with same name
@@ -26,11 +27,15 @@ export class TransactionsFileController {
     private readonly transactionFileService: TransactionsFileService,
   ) {}
 
+  /**
+   * Create a file register
+   * Insert at table transaction_file
+   * Insert file at UPLOAD_DIR env folder
+   * @param file
+   */
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: defaultConfig }))
   create(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-
     return this.transactionFileService.create({
       filename: file.filename,
     });

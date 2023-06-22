@@ -10,6 +10,9 @@ export enum TransactionType {
 
 @Table({ tableName: 'transactions' })
 export class Transaction extends Model {
+  @Column
+  transaction_file: number;
+
   @Column(
     DataTypes.ENUM(
       TransactionType.PRODUCER_SALE,

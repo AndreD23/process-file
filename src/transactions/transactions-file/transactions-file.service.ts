@@ -22,8 +22,6 @@ export class TransactionsFileService {
   ) {}
 
   async create(createTransactionFileDto: CreateTransactionFileDto) {
-    console.log('Service create');
-
     // Creating a new transaction row with pending status
     const transaction = await this.transactionFileModel.create({
       filename: createTransactionFileDto.filename,
@@ -89,11 +87,11 @@ export class TransactionsFileService {
 
     // Processing each transaction at file
     rl.on('line', (line) => {
-      console.log(`Line from file: ${line}`);
-
       // Check strings
       const arrTransaction = [];
       let error = '';
+
+      arrTransaction['transaction_file'] = transactionId;
 
       arrTransaction['type'] = line.substring(0, 1);
       if (!arrTransaction['type'].length) {
@@ -130,7 +128,8 @@ export class TransactionsFileService {
         return;
       }
 
-      // TODO: Transaction on the account balance
+      // Transaction on the account balance
+      this.processTransaction(arrTransaction);
     });
 
     rl.on('close', async () => {
@@ -154,9 +153,18 @@ export class TransactionsFileService {
       await transaction.update({ status: TransactionFileStatus.DONE });
     });
   }
-}
 
-function processTransaction(transaction) {}
+  processTransaction(transaction) {
+    this.transactionService.create({
+      transaction_file: transaction['transaction_file'],
+      type: transaction['type'],
+      data: transaction['data'],
+      product: transaction['product'],
+      value: transaction['value'],
+      seller: transaction['seller'],
+    });
+  }
+}
 
 // Fake time processing
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -10,9 +10,12 @@ export class TransactionsService {
     private transactionModel: typeof Transaction,
   ) {}
 
-  async create(createTransactionDTO: CreateTransactionDto) {
-    console.log('################# OI BB');
-    // await this.transactionModel.create(createTransactionDTO as any);
+  /**
+   * Create transaction register at table
+   * @param createTransactionDTO
+   */
+  create(createTransactionDTO: CreateTransactionDto) {
+    return this.transactionModel.create(createTransactionDTO as any);
   }
 
   findAll() {
