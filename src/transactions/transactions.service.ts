@@ -89,34 +89,70 @@ export class TransactionsService {
       crlfDelay: Infinity,
     });
 
+    const lineError = [];
+
     // Processing each transaction at file
     rl.on('line', (line) => {
       console.log(`Line from file: ${line}`);
-      // TODO: Check strings
 
+      // Check strings
       const arrTransaction = [];
+      let error = '';
+
       arrTransaction['type'] = line.substring(0, 1);
+      if (!arrTransaction['type'].length) {
+        error = `Tipo não identificado na linha ${line}`;
+        lineError.push(error);
+      }
+
       arrTransaction['data'] = line.substring(1, 26);
-      arrTransaction['product'] = line.substring(26, 56);
-      arrTransaction['valor'] = line.substring(56, 66);
+      if (!arrTransaction['data'].length) {
+        error = `Data não identificada na linha ${line}`;
+        lineError.push(error);
+      }
+
+      arrTransaction['product'] = line.substring(26, 56).trim();
+      if (!arrTransaction['product'].length) {
+        error = `Produto não identificado na linha ${line}`;
+        lineError.push(error);
+      }
+
+      arrTransaction['value'] = line.substring(56, 66);
+      if (!arrTransaction['value'].length) {
+        error = `Valor não identificado na linha ${line}`;
+        lineError.push(error);
+      }
+
       arrTransaction['seller'] = line.substring(66, 86);
-      console.log(arrTransaction);
+      if (!arrTransaction['seller'].length) {
+        error = `Vendedor não identificado na linha ${line}`;
+        lineError.push(error);
+      }
 
-      // TODO: If Error, add error note and update
+      // If Error, skip and do not process the line
+      if (error.length) {
+        return;
+      }
 
-      // TODO:Transaction on the account balance
+      // TODO: Transaction on the account balance
     });
 
     rl.on('close', async () => {
-      // TODO: Ending of file: update status and
-
       // Random time processing
       await sleep(Math.random() * 10000);
-      const randomStatus =
-        Math.random() > 0.5 ? TransactionStatus.DONE : TransactionStatus.ERROR;
 
-      // TODO: Update transaction status
-      await transaction.update({ status: randomStatus });
+      // If has error, update with notes
+      if (lineError.length) {
+        await transaction.update({
+          notes: lineError.join('\n'),
+          status: TransactionStatus.ERROR,
+        });
+
+        return;
+      }
+
+      // Process with no errors
+      await transaction.update({ status: TransactionStatus.DONE });
 
       // TODO: delete file
     });
