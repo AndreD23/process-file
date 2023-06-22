@@ -91,21 +91,34 @@ export class TransactionsService {
 
     // Processing each transaction at file
     rl.on('line', (line) => {
-      // Check strings
       console.log(`Line from file: ${line}`);
-      // TODO: If Error, add error note
+      // TODO: Check strings
+
+      const arrTransaction = [];
+      arrTransaction['type'] = line.substring(0, 1);
+      arrTransaction['data'] = line.substring(1, 26);
+      arrTransaction['product'] = line.substring(26, 56);
+      arrTransaction['valor'] = line.substring(56, 66);
+      arrTransaction['seller'] = line.substring(66, 86);
+      console.log(arrTransaction);
+
+      // TODO: If Error, add error note and update
+
+      // TODO:Transaction on the account balance
     });
 
     rl.on('close', async () => {
-      // Ending of file: update status and delete file
+      // TODO: Ending of file: update status and
 
       // Random time processing
       await sleep(Math.random() * 10000);
       const randomStatus =
         Math.random() > 0.5 ? TransactionStatus.DONE : TransactionStatus.ERROR;
 
-      // Update transaction status
+      // TODO: Update transaction status
       await transaction.update({ status: randomStatus });
+
+      // TODO: delete file
     });
   }
 }
