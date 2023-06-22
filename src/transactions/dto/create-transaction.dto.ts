@@ -1,3 +1,3 @@
 export class CreateTransactionDto {
-  status: string;
+  filename: string;
 }

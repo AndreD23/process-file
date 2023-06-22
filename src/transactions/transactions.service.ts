@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transaction } from './entities/transaction.entity';
+import { Transaction, TransactionStatus } from './entities/transaction.entity';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 
@@ -18,7 +18,7 @@ export class TransactionsService {
   async create(createTransactionDto: CreateTransactionDto) {
     // Creating a new transaction row with pending status
     const transaction = await this.transactionModel.create({
-      status: 'PENDING',
+      status: TransactionStatus.PENDING,
     });
 
     // Send to processing queue to be processed
@@ -65,11 +65,12 @@ export class TransactionsService {
     }
 
     // Change the transaction state to processing
-    await transaction.update({ status: 'PROCESSING' });
+    await transaction.update({ status: TransactionStatus.PROCESSING });
 
     // Random time processing
     await sleep(Math.random() * 10000);
-    const randomStatus = Math.random() > 0.5 ? 'DONE' : 'ERROR';
+    const randomStatus =
+      Math.random() > 0.5 ? TransactionStatus.DONE : TransactionStatus.ERROR;
 
     // Update transaction status
     await transaction.update({ status: randomStatus });
