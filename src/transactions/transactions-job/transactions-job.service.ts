@@ -1,11 +1,11 @@
 import { Process, Processor } from '@nestjs/bull';
-import { TransactionsService } from '../transactions.service';
+import { TransactionsFileService } from '../transactions-file/transactions-file.service';
 import { Job } from 'bull';
 
 // Process transactions file queue
 @Processor('transactions')
 export class TransactionsJobService {
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(private transactionsService: TransactionsFileService) {}
 
   /**
    * Process the job through its id in redis

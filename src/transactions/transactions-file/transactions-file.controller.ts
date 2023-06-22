@@ -3,15 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { TransactionsFileService } from './transactions-file.service';
+import { CreateTransactionFileDto } from './dto/create-transaction-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
@@ -26,14 +23,14 @@ const defaultConfig = diskStorage({
   },
 });
 
-@Controller('transactions')
-export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+@Controller('transactions-file')
+export class TransactionsFileController {
+  constructor(private readonly transactionsService: TransactionsFileService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: defaultConfig }))
   create(
-    @Body() createTransactionDto: CreateTransactionDto,
+    @Body() createTransactionDto: CreateTransactionFileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.transactionsService.create({
@@ -49,18 +46,5 @@ export class TransactionsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.transactionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
   }
 }

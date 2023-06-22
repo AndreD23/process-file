@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CreateTransactionFileDto } from './dto/create-transaction-file.dto';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transaction, TransactionStatus } from './entities/transaction.entity';
+import {
+  Transaction,
+  TransactionStatus,
+} from './entities/transaction-file.entity';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import * as fs from 'fs';
 import * as readline from 'node:readline';
-import events from 'node:events';
 
 const UPLOAD_DIR = './upload/transaction-files/';
 
 @Injectable()
-export class TransactionsService {
+export class TransactionsFileService {
   constructor(
     @InjectModel(Transaction)
     private transactionModel: typeof Transaction,
@@ -20,7 +21,7 @@ export class TransactionsService {
     private transactionsQueue: Queue,
   ) {}
 
-  async create(createTransactionDto: CreateTransactionDto) {
+  async create(createTransactionDto: CreateTransactionFileDto) {
     // Creating a new transaction row with pending status
     const transaction = await this.transactionModel.create({
       filename: createTransactionDto.filename,
@@ -47,10 +48,6 @@ export class TransactionsService {
     });
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
-
   remove(id: number) {
     return `This action removes a #${id} transaction`;
   }
@@ -73,8 +70,8 @@ export class TransactionsService {
     await transaction.update({ status: TransactionStatus.PROCESSING });
 
     // Find transaction file
-    const transactionFile = UPLOAD_DIR + transaction.get('filename');
-    if (!fs.existsSync(transactionFile)) {
+    const transactionFilePath = UPLOAD_DIR + transaction.get('filename');
+    if (!fs.existsSync(transactionFilePath)) {
       await transaction.update({
         notes: 'Erro ao processar: arquivo não encontrado no sistema',
         status: TransactionStatus.ERROR,
@@ -85,7 +82,7 @@ export class TransactionsService {
     // Read transaction file
     // Reading in streaming line by line for memory efficiency
     const rl = readline.createInterface({
-      input: fs.createReadStream(transactionFile),
+      input: fs.createReadStream(transactionFilePath),
       crlfDelay: Infinity,
     });
 
@@ -141,6 +138,9 @@ export class TransactionsService {
       // Random time processing
       await sleep(Math.random() * 10000);
 
+      // Delete transaction file
+      fs.unlinkSync(transactionFilePath);
+
       // If has error, update with notes
       if (lineError.length) {
         await transaction.update({
@@ -153,8 +153,6 @@ export class TransactionsService {
 
       // Process with no errors
       await transaction.update({ status: TransactionStatus.DONE });
-
-      // TODO: delete file
     });
   }
 }

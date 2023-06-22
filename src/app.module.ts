@@ -4,8 +4,8 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
-import { TransactionsModule } from './transactions/transactions.module';
-import { Transaction } from './transactions/entities/transaction.entity';
+import { TransactionsFileModule } from './transactions/transactions-file/transactions-file.module';
+import { Transaction } from './transactions/transactions-file/entities/transaction-file.entity';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from '@nestjs/config';
 
@@ -70,7 +70,7 @@ console.log(process.env.DB_DIALECT);
       }),
     ),
     UsersModule,
-    TransactionsModule,
+    TransactionsFileModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
