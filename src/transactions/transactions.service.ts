@@ -5,6 +5,11 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Transaction, TransactionStatus } from './entities/transaction.entity';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
+import * as fs from 'fs';
+import * as readline from 'node:readline';
+import events from 'node:events';
+
+const UPLOAD_DIR = './upload/transaction-files/';
 
 @Injectable()
 export class TransactionsService {
@@ -61,12 +66,31 @@ export class TransactionsService {
 
     const transaction = await this.transactionModel.findByPk(transactionId);
     if (!transaction) {
-      console.log('Transaction with given id not found');
       return;
     }
 
     // Change the transaction state to processing
     await transaction.update({ status: TransactionStatus.PROCESSING });
+
+    // Find transaction file
+    const transactionFile = UPLOAD_DIR + transaction.get('filename');
+    if (!fs.existsSync(transactionFile)) {
+      await transaction.update({
+        notes: 'Erro ao processar: arquivo não encontrado no sistema',
+        status: TransactionStatus.ERROR,
+      });
+      return;
+    }
+
+    return;
+
+    // Read transaction file
+
+    // Processing each transaction at file
+    // Check strings
+    // If Error, add error note
+
+    // Ending of file: update status and delete file
 
     // Random time processing
     await sleep(Math.random() * 10000);
