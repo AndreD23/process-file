@@ -5,7 +5,7 @@ import { Job } from 'bull';
 // Process transactions file queue
 @Processor('transactions')
 export class TransactionsJobService {
-  constructor(private transactionsService: TransactionsFileService) {}
+  constructor(private transactionsFileService: TransactionsFileService) {}
 
   /**
    * Process the job through its id in redis
@@ -13,7 +13,7 @@ export class TransactionsJobService {
    */
   @Process()
   async process(job: Job<{ transactionId: number }>) {
-    await this.transactionsService.process(job.data.transactionId);
+    await this.transactionsFileService.process(job.data.transactionId);
     return {};
   }
 }

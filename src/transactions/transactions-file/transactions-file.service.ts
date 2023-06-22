@@ -9,22 +9,24 @@ import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import * as fs from 'fs';
 import * as readline from 'node:readline';
-
-const UPLOAD_DIR = './upload/transaction-files/';
+import { TransactionsService } from '../transactions.service';
 
 @Injectable()
 export class TransactionsFileService {
   constructor(
     @InjectModel(TransactionFile)
     private transactionFileModel: typeof TransactionFile,
+    private transactionService: TransactionsService,
     @InjectQueue('transactions')
     private transactionsQueue: Queue,
   ) {}
 
-  async create(createTransactionDto: CreateTransactionFileDto) {
+  async create(createTransactionFileDto: CreateTransactionFileDto) {
+    console.log('Service create');
+
     // Creating a new transaction row with pending status
     const transaction = await this.transactionFileModel.create({
-      filename: createTransactionDto.filename,
+      filename: createTransactionFileDto.filename,
       status: TransactionFileStatus.PENDING,
     });
 
@@ -48,10 +50,6 @@ export class TransactionsFileService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
-  }
-
   /**
    * Process a single transaction file
    * Receive the transaction identifier from the queue for processing
@@ -70,7 +68,8 @@ export class TransactionsFileService {
     await transaction.update({ status: TransactionFileStatus.PROCESSING });
 
     // Find transaction file
-    const transactionFilePath = UPLOAD_DIR + transaction.get('filename');
+    const transactionFilePath =
+      process.env.UPLOAD_DIR + transaction.get('filename');
     if (!fs.existsSync(transactionFilePath)) {
       await transaction.update({
         notes: 'Erro ao processar: arquivo não encontrado no sistema',
@@ -156,6 +155,8 @@ export class TransactionsFileService {
     });
   }
 }
+
+function processTransaction(transaction) {}
 
 // Fake time processing
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

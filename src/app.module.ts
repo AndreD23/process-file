@@ -33,8 +33,6 @@ const authenticate = async (email: string, password: string) => {
   return null;
 };
 
-console.log(process.env.DB_DIALECT);
-
 @Module({
   imports: [
     ConfigModule.forRoot(),
