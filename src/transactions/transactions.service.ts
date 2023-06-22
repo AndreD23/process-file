@@ -82,23 +82,31 @@ export class TransactionsService {
       return;
     }
 
-    return;
-
     // Read transaction file
+    // Reading in streaming line by line for memory efficiency
+    const rl = readline.createInterface({
+      input: fs.createReadStream(transactionFile),
+      crlfDelay: Infinity,
+    });
 
     // Processing each transaction at file
-    // Check strings
-    // If Error, add error note
+    rl.on('line', (line) => {
+      // Check strings
+      console.log(`Line from file: ${line}`);
+      // TODO: If Error, add error note
+    });
 
-    // Ending of file: update status and delete file
+    rl.on('close', async () => {
+      // Ending of file: update status and delete file
 
-    // Random time processing
-    await sleep(Math.random() * 10000);
-    const randomStatus =
-      Math.random() > 0.5 ? TransactionStatus.DONE : TransactionStatus.ERROR;
+      // Random time processing
+      await sleep(Math.random() * 10000);
+      const randomStatus =
+        Math.random() > 0.5 ? TransactionStatus.DONE : TransactionStatus.ERROR;
 
-    // Update transaction status
-    await transaction.update({ status: randomStatus });
+      // Update transaction status
+      await transaction.update({ status: randomStatus });
+    });
   }
 }
 
