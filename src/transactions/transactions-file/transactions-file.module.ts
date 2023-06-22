@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { TransactionsFileService } from './transactions-file.service';
 import { TransactionsFileController } from './transactions-file.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Transaction } from './entities/transaction-file.entity';
+import { TransactionFile } from './entities/transaction-file.entity';
 import { BullModule } from '@nestjs/bull';
 import { TransactionsJobService } from '../transactions-job/transactions-job.service';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Transaction]),
+    SequelizeModule.forFeature([TransactionFile]),
     BullModule.registerQueue({
       name: 'transactions',
     }),

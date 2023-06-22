@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateTransactionFileDto } from './dto/create-transaction-file.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import {
-  Transaction,
-  TransactionStatus,
+  TransactionFile,
+  TransactionFileStatus,
 } from './entities/transaction-file.entity';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
@@ -15,17 +15,17 @@ const UPLOAD_DIR = './upload/transaction-files/';
 @Injectable()
 export class TransactionsFileService {
   constructor(
-    @InjectModel(Transaction)
-    private transactionModel: typeof Transaction,
+    @InjectModel(TransactionFile)
+    private transactionFileModel: typeof TransactionFile,
     @InjectQueue('transactions')
     private transactionsQueue: Queue,
   ) {}
 
   async create(createTransactionDto: CreateTransactionFileDto) {
     // Creating a new transaction row with pending status
-    const transaction = await this.transactionModel.create({
+    const transaction = await this.transactionFileModel.create({
       filename: createTransactionDto.filename,
-      status: TransactionStatus.PENDING,
+      status: TransactionFileStatus.PENDING,
     });
 
     // Send to processing queue to be processed
@@ -37,13 +37,13 @@ export class TransactionsFileService {
   }
 
   findAll() {
-    return this.transactionModel.findAll({
+    return this.transactionFileModel.findAll({
       order: [['createdAt', 'DESC']],
     });
   }
 
   findOne(id: number) {
-    return this.transactionModel.findOne({
+    return this.transactionFileModel.findOne({
       where: { id },
     });
   }
@@ -61,20 +61,20 @@ export class TransactionsFileService {
     // Random time processing
     await sleep(Math.random() * 10000);
 
-    const transaction = await this.transactionModel.findByPk(transactionId);
+    const transaction = await this.transactionFileModel.findByPk(transactionId);
     if (!transaction) {
       return;
     }
 
     // Change the transaction state to processing
-    await transaction.update({ status: TransactionStatus.PROCESSING });
+    await transaction.update({ status: TransactionFileStatus.PROCESSING });
 
     // Find transaction file
     const transactionFilePath = UPLOAD_DIR + transaction.get('filename');
     if (!fs.existsSync(transactionFilePath)) {
       await transaction.update({
         notes: 'Erro ao processar: arquivo não encontrado no sistema',
-        status: TransactionStatus.ERROR,
+        status: TransactionFileStatus.ERROR,
       });
       return;
     }
@@ -145,14 +145,14 @@ export class TransactionsFileService {
       if (lineError.length) {
         await transaction.update({
           notes: lineError.join('\n'),
-          status: TransactionStatus.ERROR,
+          status: TransactionFileStatus.ERROR,
         });
 
         return;
       }
 
       // Process with no errors
-      await transaction.update({ status: TransactionStatus.DONE });
+      await transaction.update({ status: TransactionFileStatus.DONE });
     });
   }
 }

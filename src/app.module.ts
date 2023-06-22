@@ -5,7 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { TransactionsFileModule } from './transactions/transactions-file/transactions-file.module';
-import { Transaction } from './transactions/transactions-file/entities/transaction-file.entity';
+import { TransactionFile } from './transactions/transactions-file/entities/transaction-file.entity';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from '@nestjs/config';
 
@@ -54,7 +54,7 @@ console.log(process.env.DB_DIALECT);
         useFactory: () => ({
           adminJsOptions: {
             rootPath: '/admin',
-            resources: [User, Transaction],
+            resources: [User, TransactionFile],
           },
           auth: {
             authenticate,

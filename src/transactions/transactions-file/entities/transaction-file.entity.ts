@@ -1,27 +1,27 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 
-export enum TransactionStatus {
+export enum TransactionFileStatus {
   PENDING = 'PENDING',
   PROCESSING = 'PROCESSING',
   DONE = 'DONE',
   ERROR = 'ERROR',
 }
 
-@Table({ tableName: 'transactions' })
-export class Transaction extends Model {
+@Table({ tableName: 'transactions_file' })
+export class TransactionFile extends Model {
   @Column
   filename: string;
 
   @Column(
     DataTypes.ENUM(
-      TransactionStatus.PENDING,
-      TransactionStatus.PROCESSING,
-      TransactionStatus.DONE,
-      TransactionStatus.ERROR,
+      TransactionFileStatus.PENDING,
+      TransactionFileStatus.PROCESSING,
+      TransactionFileStatus.DONE,
+      TransactionFileStatus.ERROR,
     ),
   )
-  status: TransactionStatus;
+  status: TransactionFileStatus;
 
   @Column(DataTypes.TEXT)
   notes: string;

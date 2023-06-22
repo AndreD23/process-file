@@ -2,21 +2,18 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Param,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
 import { TransactionsFileService } from './transactions-file.service';
-import { CreateTransactionFileDto } from './dto/create-transaction-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
-const UPLOAD_DIR = './upload/transaction-files/';
-const MAX_UPLOAD_SIZE = 10; // MB
-
+// Upload folder config
+// Handle location folder and file name to avoid files with same name
 const defaultConfig = diskStorage({
-  destination: UPLOAD_DIR,
+  destination: process.env.UPLOAD_DIR,
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, 'file-' + uniqueSuffix);
@@ -25,26 +22,25 @@ const defaultConfig = diskStorage({
 
 @Controller('transactions-file')
 export class TransactionsFileController {
-  constructor(private readonly transactionsService: TransactionsFileService) {}
+  constructor(
+    private readonly transactionFileService: TransactionsFileService,
+  ) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: defaultConfig }))
-  create(
-    @Body() createTransactionDto: CreateTransactionFileDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.transactionsService.create({
+  create(@UploadedFile() file: Express.Multer.File) {
+    return this.transactionFileService.create({
       filename: file.filename,
     });
   }
 
   @Get()
   findAll() {
-    return this.transactionsService.findAll();
+    return this.transactionFileService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
+    return this.transactionFileService.findOne(+id);
   }
 }
