@@ -1,10 +1,7 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'transactions' })
 export class Transaction extends Model {
-  @Column
-  filename: string;
-
   @Column
   status: string;
 }

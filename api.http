@@ -13,10 +13,9 @@ Content-Type: application/json
 ### Get Transactions
 GET http://localhost:3000/transactions
 
+### Get Single Transaction
+GET http://localhost:3000/transactions/5
+
 ### Create Transaction
 POST http://localhost:3000/transactions
 Content-Type: application/json
-
-{
-  "status": "PENDING"
-}

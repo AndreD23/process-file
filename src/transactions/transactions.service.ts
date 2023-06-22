@@ -3,16 +3,30 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from './entities/transaction.entity';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectModel(Transaction)
     private transactionModel: typeof Transaction,
+    @InjectQueue('transactions')
+    private transactionsQueue: Queue,
   ) {}
 
-  create(createTransactionDto: CreateTransactionDto) {
-    return this.transactionModel.create(createTransactionDto as any);
+  async create(createTransactionDto: CreateTransactionDto) {
+    // Creating a new transaction row with pending status
+    const transaction = await this.transactionModel.create({
+      status: 'PENDING',
+    });
+
+    // Send to processing queue to be processed
+    await this.transactionsQueue.add({
+      transactionId: transaction.id,
+    });
+
+    return transaction;
   }
 
   findAll() {
@@ -22,7 +36,9 @@ export class TransactionsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+    return this.transactionModel.findOne({
+      where: { id },
+    });
   }
 
   update(id: number, updateTransactionDto: UpdateTransactionDto) {
@@ -33,5 +49,32 @@ export class TransactionsService {
     return `This action removes a #${id} transaction`;
   }
 
-  produce() {}
+  /**
+   * Process a single transaction file
+   * Receive the transaction identifier from the queue for processing
+   * @param transactionId
+   */
+  async process(transactionId: number) {
+    // Random time processing
+    await sleep(Math.random() * 10000);
+
+    const transaction = await this.transactionModel.findByPk(transactionId);
+    if (!transaction) {
+      console.log('Transaction with given id not found');
+      return;
+    }
+
+    // Change the transaction state to processing
+    await transaction.update({ status: 'PROCESSING' });
+
+    // Random time processing
+    await sleep(Math.random() * 10000);
+    const randomStatus = Math.random() > 0.5 ? 'DONE' : 'ERROR';
+
+    // Update transaction status
+    await transaction.update({ status: randomStatus });
+  }
 }
+
+// Fake time processing
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

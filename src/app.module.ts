@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/entities/transaction.entity';
+import { BullModule } from '@nestjs/bull';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -66,6 +67,12 @@ const authenticate = async (email: string, password: string) => {
     ),
     UsersModule,
     TransactionsModule,
+    BullModule.forRoot({
+      redis: {
+        host: 'redis',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

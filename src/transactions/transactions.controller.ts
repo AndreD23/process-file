@@ -17,7 +17,6 @@ export class TransactionsController {
 
   @Post()
   create(@Body() createTransactionDto: CreateTransactionDto) {
-    console.log('Oláaaa');
     return this.transactionsService.create(createTransactionDto);
   }
 
@@ -43,9 +42,4 @@ export class TransactionsController {
   remove(@Param('id') id: string) {
     return this.transactionsService.remove(+id);
   }
-
-  // @Post('')
-  // produce() {
-  //   return this.transactionsService.produce();
-  // }
 }
