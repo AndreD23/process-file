@@ -18,6 +18,7 @@ export class TransactionsService {
   async create(createTransactionDto: CreateTransactionDto) {
     // Creating a new transaction row with pending status
     const transaction = await this.transactionModel.create({
+      filename: createTransactionDto.filename,
       status: TransactionStatus.PENDING,
     });
 

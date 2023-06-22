@@ -36,7 +36,9 @@ export class TransactionsController {
     @Body() createTransactionDto: CreateTransactionDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.transactionsService.create(createTransactionDto);
+    return this.transactionsService.create({
+      filename: file.filename,
+    });
   }
 
   @Get()
