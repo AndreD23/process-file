@@ -10,7 +10,7 @@ services:
       - .:/home/node/app
     depends_on:
       - postgres
-#    entrypoint: sh -c "npm install && npm run start:dev"
+    entrypoint: sh -c "npm install && npm run start:dev"
 
   postgres:
     image: postgres
@@ -33,6 +33,8 @@ services:
       - 8000:80
     volumes:
       - ./.docker/metabase-data:/metabase-data
+      - ./environment/servers.json:/pgadmin4/servers.json
+      - ./environment/pgpass:/pgpass
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: secret
