@@ -2,47 +2,49 @@ version: '3'
 
 services:
   app:
-    build:
-      context: app
-      network: host
-    container_name: hubla-app
+    build: .
+    container_name: process-file-app
     ports:
       - 3000:3000
     volumes:
       - .:/home/node/app
     depends_on:
-      - mysql
-      - rabbitmq3
+      - postgres
+    entrypoint: sh -c "npm install && npm run start:dev"
 
-  process-file:
-    build:
-      context: process-file
-      network: host
-    container_name: hubla-process-file
+  postgres:
+    image: postgres
+    restart: always
     ports:
-      - "50051:50051"
+      - 5432:5432
+    environment:
+      POSTGRES_DB: develop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      PGDATA: /var/lib/postgresql/data
     volumes:
-      - .:/home/node/app
+      - ./.docker/pgdata:/var/lib/postgresql/data
+
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./.docker/metabase-data:/metabase-data
+      - ./environment/servers.json:/pgadmin4/servers.json
+      - ./environment/pgpass:/pgpass
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: secret
     depends_on:
-      - mysql
-      - rabbitmq3
+      - postgres
+    links:
+      - postgres
 
-  mysql:
-    image: mysql:8.0.33-debian
+  redis:
+    image: redis
+    restart: always
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: hubla
-
-  rabbitmq3:
-    container_name: "rabbitmq"
-    image: rabbitmq:3.12.0-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER=hubla
-      - RABBITMQ_DEFAULT_PASS=password
-    ports:
-      # AMQP protocol port
-      - '5672:5672'
-      # HTTP management UI
-      - '15672:15672'
+      - 6379:6379

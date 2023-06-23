@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+package-lock.json
+yarn.lock
 
 # Logs
 logs
@@ -35,3 +37,6 @@ lerna-debug.log*
 
 # ENVs
 .env
+
+# Upload dir
+upload/
