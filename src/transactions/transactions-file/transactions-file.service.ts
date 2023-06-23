@@ -154,8 +154,11 @@ export class TransactionsFileService {
     });
   }
 
-  processTransaction(transaction) {
-    this.transactionService.create({
+  async processTransaction(transaction) {
+    // Random time processing
+    await sleep(Math.random() * 10000);
+
+    await this.transactionService.create({
       transaction_file: transaction['transaction_file'],
       type: transaction['type'],
       data: transaction['data'],

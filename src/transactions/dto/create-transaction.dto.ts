@@ -1,6 +1,6 @@
 export class CreateTransactionDto {
   transaction_file: number;
-  type: string;
+  type: number;
   data: string;
   product: string;
   value: number;
