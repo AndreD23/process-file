@@ -21,6 +21,12 @@ export default {
       type: {
         position: 5,
         isRequired: true,
+        availableValues: [
+          { value: '1', label: 'Venda Produtor' },
+          { value: '2', label: 'Venda Afiliado' },
+          { value: '3', label: 'Comissão Paga' },
+          { value: '4', label: 'Comissão Recebida' },
+        ],
       },
       data: {
         position: 6,
