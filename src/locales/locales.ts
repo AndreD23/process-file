@@ -43,7 +43,7 @@ const translations_pt_BR = {
   properties: {
     length: 'Tamanho',
     from: 'De',
-    to: 'Para',
+    to: 'Até',
   },
   resources: {
     users: {

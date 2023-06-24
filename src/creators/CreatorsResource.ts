@@ -14,6 +14,7 @@ export default {
       },
       account_balance: {
         position: 3,
+        isVisible: { list: true, filter: false, show: true, edit: true },
       },
       createdAt: {
         position: 4,
