@@ -28,10 +28,12 @@ export default {
         isVisible: { list: false, filter: false, show: false, edit: true },
       },
       createdAt: {
-        isVisible: false,
+        position: 6,
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
       updatedAt: {
-        isVisible: false,
+        position: 7,
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
       password_hash: {
         isVisible: false,

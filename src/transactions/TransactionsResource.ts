@@ -36,9 +36,11 @@ export default {
         position: 7,
       },
       createdAt: {
-        isVisible: false,
+        position: 8,
+        isVisible: { list: true, filter: true, show: true, edit: true },
       },
       updatedAt: {
+        position: 9,
         isVisible: false,
       },
     },

@@ -14,10 +14,12 @@ export default {
         position: 3,
       },
       createdAt: {
-        isVisible: false,
+        position: 4,
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
       updatedAt: {
-        isVisible: false,
+        position: 5,
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
     },
   },

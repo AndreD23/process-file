@@ -21,18 +21,15 @@ export default {
       },
       notes: {
         position: 4,
-        isVisible: {
-          list: false,
-          filter: false,
-          show: true,
-          edit: true,
-        },
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
       createdAt: {
-        isVisible: false,
+        position: 5,
+        isVisible: { list: true, filter: true, show: true, edit: true },
       },
       updatedAt: {
-        isVisible: false,
+        position: 6,
+        isVisible: { list: false, filter: false, show: true, edit: true },
       },
     },
   },
