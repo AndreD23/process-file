@@ -9,6 +9,12 @@ import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CreatorsModule } from './creators/creators.module';
+import { Transaction } from './transactions/entities/transaction.entity';
+import { Creator } from './creators/entities/creator.entity';
+import CreatorsResource from './creators/CreatorsResource';
+import TransactionsResource from './transactions/TransactionsResource';
+import TransactionsFileResource from './transactions/transactions-file/TransactionsFileResource';
+import UsersResource from './users/UsersResource';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -53,7 +59,15 @@ const authenticate = async (email: string, password: string) => {
         useFactory: () => ({
           adminJsOptions: {
             rootPath: '/admin',
-            resources: [User, TransactionFile],
+            resources: [
+              CreatorsResource,
+              TransactionsResource,
+              TransactionsFileResource,
+              UsersResource,
+            ],
+            branding: {
+              companyName: 'ACME Corporation',
+            },
           },
           auth: {
             authenticate,
