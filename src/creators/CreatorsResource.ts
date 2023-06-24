@@ -3,7 +3,9 @@ import { Creator } from './entities/creator.entity';
 export default {
   resource: Creator,
   options: {
-    navigation: null,
+    parent: {
+      icon: 'Smile',
+    },
     properties: {
       id: { position: 1 },
       name: {
@@ -15,11 +17,11 @@ export default {
       },
       createdAt: {
         position: 4,
-        isVisible: { list: false, filter: false, show: true, edit: true },
+        isVisible: { list: false, filter: false, show: true, edit: false },
       },
       updatedAt: {
         position: 5,
-        isVisible: { list: false, filter: false, show: true, edit: true },
+        isVisible: { list: false, filter: false, show: true, edit: false },
       },
     },
   },

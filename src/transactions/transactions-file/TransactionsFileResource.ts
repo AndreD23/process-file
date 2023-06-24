@@ -3,7 +3,7 @@ import { TransactionFile } from './entities/transaction-file.entity';
 export default {
   resource: TransactionFile,
   options: {
-    navigation: 'Transactions',
+    navigation: 'Transações',
     properties: {
       id: { position: 1 },
       filename: {
@@ -25,12 +25,16 @@ export default {
       },
       createdAt: {
         position: 5,
-        isVisible: { list: true, filter: true, show: true, edit: true },
+        isVisible: { list: true, filter: true, show: true, edit: false },
       },
       updatedAt: {
         position: 6,
-        isVisible: { list: false, filter: false, show: true, edit: true },
+        isVisible: { list: false, filter: false, show: true, edit: false },
       },
+    },
+    sort: {
+      sortBy: 'updatedAt',
+      direction: 'desc',
     },
   },
 };

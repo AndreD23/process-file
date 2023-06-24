@@ -3,7 +3,10 @@ import { Transaction } from './entities/transaction.entity';
 export default {
   resource: Transaction,
   options: {
-    navigation: 'Transactions',
+    navigation: {
+      name: 'Transações',
+      icon: 'Shuffle',
+    },
     properties: {
       id: { position: 1 },
       product: {
@@ -37,12 +40,16 @@ export default {
       },
       createdAt: {
         position: 8,
-        isVisible: { list: true, filter: true, show: true, edit: true },
+        isVisible: { list: true, filter: true, show: true, edit: false },
       },
       updatedAt: {
         position: 9,
         isVisible: false,
       },
+    },
+    sort: {
+      sortBy: 'updatedAt',
+      direction: 'desc',
     },
   },
 };

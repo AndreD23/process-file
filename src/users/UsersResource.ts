@@ -3,7 +3,20 @@ import { User } from './entities/user.entity';
 export default {
   resource: User,
   options: {
-    navigation: null,
+    parent: {
+      icon: 'User',
+    },
+    actions: {
+      resetPassword: {
+        actionType: 'record',
+        icon: 'Password',
+        handler: async (request, response, context) => {
+          return {
+            record: context.record.toJSON(),
+          };
+        },
+      },
+    },
     properties: {
       id: { position: 1 },
       email: {
@@ -29,11 +42,11 @@ export default {
       },
       createdAt: {
         position: 6,
-        isVisible: { list: false, filter: false, show: true, edit: true },
+        isVisible: { list: false, filter: false, show: true, edit: false },
       },
       updatedAt: {
         position: 7,
-        isVisible: { list: false, filter: false, show: true, edit: true },
+        isVisible: { list: false, filter: false, show: true, edit: false },
       },
       password_hash: {
         isVisible: false,

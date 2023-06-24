@@ -15,8 +15,11 @@ export class User extends Model {
   @Column
   email: string;
 
-  @Column
+  @Column(DataTypes.VIRTUAL)
   password: string;
+
+  @Column
+  password_hash: string;
 
   @Column(DataTypes.ENUM(Roles.ADMIN, Roles.MANAGER, Roles.DEVELOPER))
   role: Roles;

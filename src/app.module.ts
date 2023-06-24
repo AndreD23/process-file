@@ -3,18 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
-import { TransactionFile } from './transactions/transactions-file/entities/transaction-file.entity';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CreatorsModule } from './creators/creators.module';
-import { Transaction } from './transactions/entities/transaction.entity';
-import { Creator } from './creators/entities/creator.entity';
 import CreatorsResource from './creators/CreatorsResource';
 import TransactionsResource from './transactions/TransactionsResource';
 import TransactionsFileResource from './transactions/transactions-file/TransactionsFileResource';
 import UsersResource from './users/UsersResource';
+import locale from './locales/locales';
 
 // Avoiding use await top level
 async function registerAdapterNest() {
@@ -68,6 +65,7 @@ const authenticate = async (email: string, password: string) => {
             branding: {
               companyName: 'ACME Corporation',
             },
+            ...locale,
           },
           auth: {
             authenticate,
