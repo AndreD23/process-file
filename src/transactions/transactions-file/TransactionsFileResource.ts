@@ -1,39 +1,13 @@
 import { TransactionFile } from './entities/transaction-file.entity';
 import { join } from 'path';
-// import ComponentLoader from 'adminjs/src/backend/utils/component-loader';
-// import { componentLoader } from './component-loader';
 
-const adminUploadImport = '@adminjs/upload';
+// const adminUploadImport = '@adminjs/upload';
 
-// const filePath = join(__dirname, '../../public/upload/transaction-files');
-const filePath = join(__dirname, '../../../upload/transaction-files');
-//
-const localProvider = {
-  bucket: filePath,
-};
+const uploadFeature = require('@adminjs/upload');
 
-// const awsProvider = {
-//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   region: process.env.AWS_REGION,
-//   bucket: process.env.AWS_BUCKET,
+// const localProvider = {
+//   bucket: join(__dirname, '../../../upload/transaction-files'),
 // };
-//
-// console.log('#############');
-// console.log(__dirname);
-// console.log('#############');
-//
-// async function loadComponent() {
-//   const { ComponentLoader } = await import('adminjs');
-//   return new ComponentLoader();
-// }
-//
-// const componentLoader = loadComponent();
-//
-// console.log(await componentLoader.add());
-
-//
-// componentLoader.then({});
 
 export default {
   resource: TransactionFile,
@@ -44,8 +18,9 @@ export default {
         position: 1,
       },
       filename: {
-        position: 2,
-        isRequired: true,
+        isVisible: false,
+        // position: 2,
+        // isRequired: true,
       },
       status: {
         position: 3,
@@ -69,45 +44,48 @@ export default {
         position: 6,
         isVisible: { list: false, filter: false, show: true, edit: false },
       },
+      attachment: {
+        type: 'file',
+        position: 7,
+      },
+      path: {
+        isVisible: false,
+      },
+      folder: {
+        isVisible: false,
+      },
+      type: {
+        isVisible: false,
+      },
+      size: {
+        isVisible: false,
+      },
     },
     sort: {
       sortBy: 'updatedAt',
       direction: 'desc',
     },
     features: [
-      import(adminUploadImport).then((uploadFileFeature) => {
-        uploadFileFeature.default({
-          // componentLoader,
-          provider: {
-            local: localProvider,
-            // aws: awsProvider,
+      uploadFeature({
+        provider: {
+          local: {
+            bucket: join(__dirname, '../../../upload/transaction-files'),
           },
-          properties: {
-            key: 'path',
-            bucket: 'folder',
-            mimetype: 'type',
-            size: 'size',
-            filename: 'filename',
-            file: 'attachment',
-          },
-          validation: {
-            mimeTypes: ['text/plain'],
-          },
-        });
+          // aws: awsProvider,
+        },
+        properties: {
+          key: 'path',
+          bucket: 'folder',
+          filePath: 'folder',
+          mimetype: 'type',
+          size: 'size',
+          filename: 'filename',
+          file: 'file',
+        },
+        // validation: {
+        //   mimeTypes: ['text/plain'],
+        // },
       }),
     ],
-    // actions: {
-    //   myCustomAction: {
-    //     actionType: 'record',
-    //     component: Components.MyCustomAction, // see "Writing your own Components"
-    //     handler: (request, response, context) => {
-    //       const { record, currentAdmin } = context;
-    //       return {
-    //         record: record.toJSON(currentAdmin),
-    //         msg: 'Hello world',
-    //       };
-    //     },
-    //   },
-    // },
   },
 };
