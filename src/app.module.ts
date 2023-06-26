@@ -13,17 +13,24 @@ import TransactionsFileResource from './transactions/transactions-file/Transacti
 import UsersResource from './users/UsersResource';
 import locale from './locales/locales';
 
-// Avoiding use await top level
-async function registerAdapterNest() {
-  const AdminJS = await import('adminjs');
-  const AdminJSSequelize = await import('@adminjs/sequelize');
+const AdminJS = require('adminjs');
+const AdminJSSequelize = require('@adminjs/sequelize');
+AdminJS.default.registerAdapter({
+  Resource: AdminJSSequelize.Resource,
+  Database: AdminJSSequelize.Database,
+});
 
-  AdminJS.default.registerAdapter({
-    Resource: AdminJSSequelize.Resource,
-    Database: AdminJSSequelize.Database,
-  });
-}
-registerAdapterNest();
+// Avoiding use await top level
+// async function registerAdapterNest() {
+//   const AdminJS = await import('adminjs');
+//   const AdminJSSequelize = await import('@adminjs/sequelize');
+//
+//   AdminJS.default.registerAdapter({
+//     Resource: AdminJSSequelize.Resource,
+//     Database: AdminJSSequelize.Database,
+//   });
+// }
+// registerAdapterNest();
 
 const DEFAULT_ADMIN = {
   email: process.env.ADMINJS_EMAIL,

@@ -1,14 +1,17 @@
 import { TransactionFile } from './entities/transaction-file.entity';
-// import { join } from 'path';
-//
-// const adminUploadImport = '@adminjs/upload';
-//
+import { join } from 'path';
+// import ComponentLoader from 'adminjs/src/backend/utils/component-loader';
+// import { componentLoader } from './component-loader';
+
+const adminUploadImport = '@adminjs/upload';
+
 // const filePath = join(__dirname, '../../public/upload/transaction-files');
+const filePath = join(__dirname, '../../../upload/transaction-files');
 //
-// const localProvider = {
-//   bucket: filePath,
-// };
-//
+const localProvider = {
+  bucket: filePath,
+};
+
 // const awsProvider = {
 //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -19,13 +22,27 @@ import { TransactionFile } from './entities/transaction-file.entity';
 // console.log('#############');
 // console.log(__dirname);
 // console.log('#############');
+//
+// async function loadComponent() {
+//   const { ComponentLoader } = await import('adminjs');
+//   return new ComponentLoader();
+// }
+//
+// const componentLoader = loadComponent();
+//
+// console.log(await componentLoader.add());
+
+//
+// componentLoader.then({});
 
 export default {
   resource: TransactionFile,
   options: {
     navigation: 'Transações',
     properties: {
-      id: { position: 1 },
+      id: {
+        position: 1,
+      },
       filename: {
         position: 2,
         isRequired: true,
@@ -57,26 +74,40 @@ export default {
       sortBy: 'updatedAt',
       direction: 'desc',
     },
-    // features: [
-    //   import(adminUploadImport).then((uploadFileFeature) => {
-    //     uploadFileFeature.default({
-    //       provider: {
-    //         local: localProvider,
-    //         // aws: awsProvider,
-    //       },
-    //       properties: {
-    //         key: 'path',
-    //         bucket: 'folder',
-    //         mimetype: 'type',
-    //         size: 'size',
-    //         filename: 'filename',
-    //         file: 'attachment',
-    //       },
-    //       validation: {
-    //         mimeTypes: ['text/plain'],
-    //       },
-    //     });
-    //   }),
-    // ],
+    features: [
+      import(adminUploadImport).then((uploadFileFeature) => {
+        uploadFileFeature.default({
+          // componentLoader,
+          provider: {
+            local: localProvider,
+            // aws: awsProvider,
+          },
+          properties: {
+            key: 'path',
+            bucket: 'folder',
+            mimetype: 'type',
+            size: 'size',
+            filename: 'filename',
+            file: 'attachment',
+          },
+          validation: {
+            mimeTypes: ['text/plain'],
+          },
+        });
+      }),
+    ],
+    // actions: {
+    //   myCustomAction: {
+    //     actionType: 'record',
+    //     component: Components.MyCustomAction, // see "Writing your own Components"
+    //     handler: (request, response, context) => {
+    //       const { record, currentAdmin } = context;
+    //       return {
+    //         record: record.toJSON(currentAdmin),
+    //         msg: 'Hello world',
+    //       };
+    //     },
+    //   },
+    // },
   },
 };
