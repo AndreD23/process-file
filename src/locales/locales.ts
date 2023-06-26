@@ -138,8 +138,8 @@ const translations_pt_BR = {
 
 export default {
   locale: {
-    language: 'pt_BR',
-    availableLanguages: ['pt_BR'],
+    language: 'pt-BR',
+    availableLanguages: ['pt-BR'],
     translations: {
       pt_BR: translations_pt_BR,
     },
