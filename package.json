@@ -25,6 +25,7 @@
     "@adminjs/nestjs": "^6.0.1",
     "@adminjs/passwords": "^4.0.0",
     "@adminjs/sequelize": "^4.0.0",
+    "@adminjs/upload": "^4.0.0",
     "@nestjs/bull": "^10.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.0.0",

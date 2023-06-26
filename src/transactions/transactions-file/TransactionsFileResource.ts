@@ -1,14 +1,14 @@
 import { TransactionFile } from './entities/transaction-file.entity';
-// import { join } from 'path';
-//
-// const adminUploadImport = '@adminjs/upload';
-//
-// const filePath = join(__dirname, '../../public/upload/transaction-files');
-//
-// const localProvider = {
-//   bucket: filePath,
-// };
-//
+import { join } from 'path';
+
+const adminUploadImport = '@adminjs/upload';
+
+const filePath = join(__dirname, '../../../upload/transaction-files');
+
+const localProvider = {
+  bucket: filePath,
+};
+
 // const awsProvider = {
 //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -57,26 +57,26 @@ export default {
       sortBy: 'updatedAt',
       direction: 'desc',
     },
-    // features: [
-    //   import(adminUploadImport).then((uploadFileFeature) => {
-    //     uploadFileFeature.default({
-    //       provider: {
-    //         local: localProvider,
-    //         // aws: awsProvider,
-    //       },
-    //       properties: {
-    //         key: 'path',
-    //         bucket: 'folder',
-    //         mimetype: 'type',
-    //         size: 'size',
-    //         filename: 'filename',
-    //         file: 'attachment',
-    //       },
-    //       validation: {
-    //         mimeTypes: ['text/plain'],
-    //       },
-    //     });
-    //   }),
-    // ],
+    features: [
+      import(adminUploadImport).then((uploadFeature) => {
+        uploadFeature.default({
+          provider: {
+            local: localProvider,
+            // aws: awsProvider,
+          },
+          properties: {
+            key: 'path',
+            bucket: 'folder',
+            mimetype: 'type',
+            size: 'size',
+            filename: 'filename',
+            file: 'attachment',
+          },
+          validation: {
+            mimeTypes: ['text/plain'],
+          },
+        });
+      }),
+    ],
   },
 };
