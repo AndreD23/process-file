@@ -141,7 +141,7 @@ export default {
     language: 'pt-BR',
     availableLanguages: ['pt-BR'],
     translations: {
-      pt_BR: translations_pt_BR,
+      'pt-BR': translations_pt_BR,
     },
   },
 };
