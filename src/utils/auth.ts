@@ -5,7 +5,7 @@ export const createPasswordHash = async (password) => {
 };
 
 export const checkPassword = async (user, password) => {
-  return bcrypt.compare(password, user.password_hash);
+  return bcrypt.compare(password, user.dataValues.password_hash);
 };
 
 export const hasAdminPermission = (currentUser) => {
