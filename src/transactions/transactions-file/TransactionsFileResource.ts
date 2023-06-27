@@ -1,13 +1,12 @@
 import { TransactionFile } from './entities/transaction-file.entity';
 import { join } from 'path';
-
-// const adminUploadImport = '@adminjs/upload';
+import UploadProvider from '../../providers/UploadProvider';
 
 const uploadFeature = require('@adminjs/upload');
 
-// const localProvider = {
-//   bucket: join(__dirname, '../../../upload/transaction-files'),
-// };
+const localProvider = {
+  bucket: join(__dirname, '../../../upload/transaction-files'),
+};
 
 export default {
   resource: TransactionFile,
@@ -17,13 +16,8 @@ export default {
       id: {
         position: 1,
       },
-      filename: {
-        isVisible: false,
-        // position: 2,
-        // isRequired: true,
-      },
       status: {
-        position: 3,
+        position: 2,
         availableValues: [
           { value: 'PENDING', label: 'Pendente' },
           { value: 'PROCESSING', label: 'Em processamento' },
@@ -32,21 +26,24 @@ export default {
         ],
       },
       notes: {
-        position: 4,
+        position: 3,
         type: 'textarea',
         isVisible: { list: false, filter: false, show: true, edit: true },
       },
       createdAt: {
-        position: 5,
+        position: 4,
         isVisible: { list: true, filter: true, show: true, edit: false },
       },
       updatedAt: {
-        position: 6,
+        position: 5,
         isVisible: { list: false, filter: false, show: true, edit: false },
       },
       attachment: {
-        type: 'file',
-        position: 7,
+        position: 6,
+        isVisible: { list: false, filter: false, show: false, edit: true },
+      },
+      filename: {
+        isVisible: false,
       },
       path: {
         isVisible: false,
@@ -65,27 +62,22 @@ export default {
       sortBy: 'updatedAt',
       direction: 'desc',
     },
-    features: [
-      uploadFeature({
-        provider: {
-          local: {
-            bucket: join(__dirname, '../../../upload/transaction-files'),
-          },
-          // aws: awsProvider,
-        },
-        properties: {
-          key: 'path',
-          bucket: 'folder',
-          filePath: 'folder',
-          mimetype: 'type',
-          size: 'size',
-          filename: 'filename',
-          file: 'file',
-        },
-        // validation: {
-        //   mimeTypes: ['text/plain'],
-        // },
-      }),
-    ],
   },
+  features: [
+    uploadFeature({
+      provider: new UploadProvider(localProvider),
+      properties: {
+        key: 'path',
+        bucket: 'folder',
+        mimetype: 'type',
+        size: 'size',
+        filename: 'filename',
+        file: 'attachment',
+      },
+      uploadPath: (record, filename) => `${record.id()}-${filename}`,
+      validation: {
+        mimeTypes: ['text/plain'],
+      },
+    }),
+  ],
 };

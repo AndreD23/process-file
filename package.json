@@ -38,6 +38,7 @@
     "bull": "^4.10.4",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.3",
+    "fs-extra": "^11.1.1",
     "pg": "^8.11.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
