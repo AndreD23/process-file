@@ -31,9 +31,9 @@ export default {
         position: 4,
         isRequired: true,
         availableValues: [
-          { value: 'admin', label: 'Administrador' },
-          { value: 'manager', label: 'Gerente' },
-          { value: 'developer', label: 'Desenvolvedor' },
+          { value: 'ADMIN', label: 'Administrador' },
+          { value: 'MANAGER', label: 'Gerente' },
+          { value: 'DEVELOPER', label: 'Desenvolvedor' },
         ],
       },
       password: {

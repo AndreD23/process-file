@@ -1,5 +1,6 @@
-import { Column, Table, Model } from 'sequelize-typescript';
+import { Column, Table, Model, BeforeSave } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
+import { createPasswordHash } from '../../providers/auth';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -23,4 +24,13 @@ export class User extends Model {
 
   @Column(DataTypes.ENUM(Roles.ADMIN, Roles.MANAGER, Roles.DEVELOPER))
   role: Roles;
+
+  @BeforeSave
+  static async hashPassword(user: User) {
+    if (user.dataValues.password) {
+      user.dataValues.password_hash = await createPasswordHash(
+        user.dataValues.password,
+      );
+    }
+  }
 }
