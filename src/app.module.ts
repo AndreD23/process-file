@@ -60,6 +60,7 @@ const authenticate = async (email: string, password: string) => {
           ],
           branding: {
             companyName: 'ACME Corporation',
+            withMadeWithLove: false,
           },
           ...locale,
         },

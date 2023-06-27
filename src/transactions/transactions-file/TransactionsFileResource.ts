@@ -81,6 +81,7 @@ export default {
       },
       validation: {
         mimeTypes: ['text/plain'],
+        maxSize: 5 * 1024 * 1024, // 5MB
       },
     }),
   ],
