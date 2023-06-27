@@ -4,7 +4,7 @@ export default {
   resource: Creator,
   options: {
     parent: {
-      icon: 'Smile',
+      icon: 'PhraseSentiment',
     },
     properties: {
       id: { position: 1 },

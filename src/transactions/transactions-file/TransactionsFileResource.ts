@@ -1,37 +1,23 @@
 import { TransactionFile } from './entities/transaction-file.entity';
 import { join } from 'path';
+import UploadProvider from '../../providers/UploadProvider';
 
-const adminUploadImport = '@adminjs/upload';
-
-const filePath = join(__dirname, '../../../upload/transaction-files');
+const uploadFeature = require('@adminjs/upload');
 
 const localProvider = {
-  bucket: filePath,
+  bucket: join(__dirname, '../../../upload/transaction-files'),
 };
-
-// const awsProvider = {
-//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   region: process.env.AWS_REGION,
-//   bucket: process.env.AWS_BUCKET,
-// };
-//
-// console.log('#############');
-// console.log(__dirname);
-// console.log('#############');
 
 export default {
   resource: TransactionFile,
   options: {
     navigation: 'Transações',
     properties: {
-      id: { position: 1 },
-      filename: {
-        position: 2,
-        isRequired: true,
+      id: {
+        position: 1,
       },
       status: {
-        position: 3,
+        position: 2,
         availableValues: [
           { value: 'PENDING', label: 'Pendente' },
           { value: 'PROCESSING', label: 'Em processamento' },
@@ -40,43 +26,58 @@ export default {
         ],
       },
       notes: {
-        position: 4,
+        position: 3,
         type: 'textarea',
         isVisible: { list: false, filter: false, show: true, edit: true },
       },
       createdAt: {
-        position: 5,
+        position: 4,
         isVisible: { list: true, filter: true, show: true, edit: false },
       },
       updatedAt: {
-        position: 6,
+        position: 5,
         isVisible: { list: false, filter: false, show: true, edit: false },
+      },
+      attachment: {
+        position: 6,
+        isVisible: { list: false, filter: false, show: false, edit: true },
+      },
+      filename: {
+        isVisible: false,
+      },
+      path: {
+        isVisible: false,
+      },
+      folder: {
+        isVisible: false,
+      },
+      type: {
+        isVisible: false,
+      },
+      size: {
+        isVisible: false,
       },
     },
     sort: {
       sortBy: 'updatedAt',
       direction: 'desc',
     },
-    features: [
-      import(adminUploadImport).then((uploadFeature) => {
-        uploadFeature.default({
-          provider: {
-            local: localProvider,
-            // aws: awsProvider,
-          },
-          properties: {
-            key: 'path',
-            bucket: 'folder',
-            mimetype: 'type',
-            size: 'size',
-            filename: 'filename',
-            file: 'attachment',
-          },
-          validation: {
-            mimeTypes: ['text/plain'],
-          },
-        });
-      }),
-    ],
   },
+  features: [
+    uploadFeature({
+      provider: new UploadProvider(localProvider),
+      properties: {
+        key: 'path',
+        bucket: 'folder',
+        mimetype: 'type',
+        size: 'size',
+        filename: 'filename',
+        file: 'attachment',
+      },
+      uploadPath: (record, filename) => `${record.id()}-${filename}`,
+      validation: {
+        mimeTypes: ['text/plain'],
+      },
+    }),
+  ],
 };

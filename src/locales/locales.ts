@@ -4,7 +4,7 @@ const commonProps = {
   updatedAt: 'Atualização',
 };
 
-const translations_pt_BR = {
+const translations = {
   actions: {
     new: 'Criar novo',
     edit: 'Editar',
@@ -120,7 +120,7 @@ const translations_pt_BR = {
     noRecordsInResource: 'Não existem registros para esse recurso',
     noRecords: 'Sem registros',
     confirmDelete: 'Você tem certeza que deseja remover esse registro?',
-    loginWelcome: 'Sistema de gerenciamento de tarefas',
+    loginWelcome: 'Sistema de gerenciamento de transações',
     email: 'Email',
     password: 'Senha',
     login: 'Entrar',
@@ -129,19 +129,18 @@ const translations_pt_BR = {
       'Uma nova senha aleatória será gerada e atribuída para este usuário, para prosseguir clique no botão "Redefinir senha".',
     newPasswordMessage: 'Nova senha "{{newPassword}}" atribuída ao usuário.',
     newPasswordMessageError: 'Erro ao redefinir a senha automaticamente.',
-    dashboardTitle: 'Bem-vindo(a) ao Task Manager',
-    dashboardSubTitle: 'Controle todos seus projetos de uma forma simples',
-    taskTypeCardTitle: 'Tipos de Tarefas',
-    taskEffortCardTitle: 'Esforço por prazo',
   },
 };
 
 export default {
   locale: {
     language: 'pt-BR',
-    availableLanguages: ['pt-BR'],
-    translations: {
-      'pt-BR': translations_pt_BR,
-    },
+    // availableLanguages: ['pt-BR'],
+    // translations: {
+    //   resources: {
+    //     'pt-BR': translations_pt_BR,
+    //   },
+    // },
+    translations,
   },
 };

@@ -25,4 +25,16 @@ export class TransactionFile extends Model {
 
   @Column(DataTypes.TEXT)
   notes: string;
+
+  @Column
+  path: string;
+
+  @Column
+  folder: string;
+
+  @Column
+  type: string;
+
+  @Column
+  size: number;
 }

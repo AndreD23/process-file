@@ -5,7 +5,7 @@ export default {
   options: {
     navigation: {
       name: 'Transações',
-      icon: 'Shuffle',
+      icon: 'ArrowsHorizontal',
     },
     properties: {
       id: { position: 1 },
