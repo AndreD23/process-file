@@ -19,26 +19,26 @@ export default {
     },
     properties: {
       id: { position: 1 },
-      email: {
+      name: {
         position: 2,
         isRequired: true,
       },
-      name: {
+      email: {
         position: 3,
         isRequired: true,
       },
-      role: {
+      password: {
         position: 4,
+        isVisible: { list: false, filter: false, show: false, edit: true },
+      },
+      role: {
+        position: 5,
         isRequired: true,
         availableValues: [
           { value: 'ADMIN', label: 'Administrador' },
           { value: 'MANAGER', label: 'Gerente' },
           { value: 'DEVELOPER', label: 'Desenvolvedor' },
         ],
-      },
-      password: {
-        position: 5,
-        isVisible: { list: false, filter: false, show: false, edit: true },
       },
       createdAt: {
         position: 6,

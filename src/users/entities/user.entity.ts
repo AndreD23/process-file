@@ -1,6 +1,6 @@
 import { Column, Table, Model, BeforeSave } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import { createPasswordHash } from '../../providers/auth';
+import { createPasswordHash, checkPassword } from '../../utils/auth';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -32,5 +32,9 @@ export class User extends Model {
         user.dataValues.password,
       );
     }
+  }
+
+  checkPassword(password) {
+    return checkPassword(this, password);
   }
 }
