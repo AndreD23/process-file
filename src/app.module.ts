@@ -12,6 +12,9 @@ import TransactionsResource from './transactions/TransactionsResource';
 import TransactionsFileResource from './transactions/transactions-file/TransactionsFileResource';
 import UsersResource from './users/UsersResource';
 import locale from './locales/locales';
+import { ScheduleModule } from '@nestjs/schedule';
+
+const { AdminModule } = require('@adminjs/nestjs');
 
 const AdminJS = require('adminjs');
 const AdminJSSequelize = require('@adminjs/sequelize');
@@ -19,18 +22,6 @@ AdminJS.default.registerAdapter({
   Resource: AdminJSSequelize.Resource,
   Database: AdminJSSequelize.Database,
 });
-
-// Avoiding use await top level
-// async function registerAdapterNest() {
-//   const AdminJS = await import('adminjs');
-//   const AdminJSSequelize = await import('@adminjs/sequelize');
-//
-//   AdminJS.default.registerAdapter({
-//     Resource: AdminJSSequelize.Resource,
-//     Database: AdminJSSequelize.Database,
-//   });
-// }
-// registerAdapterNest();
 
 const DEFAULT_ADMIN = {
   email: process.env.ADMINJS_EMAIL,
@@ -57,45 +48,43 @@ const authenticate = async (email: string, password: string) => {
       autoLoadModels: true,
       synchronize: true,
     }),
-    // AdminJS version 7 is ESM-only. In order to import it, you have to use dynamic imports.
-    import('@adminjs/nestjs').then(({ AdminModule }) =>
-      AdminModule.createAdminAsync({
-        useFactory: () => ({
-          adminJsOptions: {
-            rootPath: '/admin',
-            resources: [
-              CreatorsResource,
-              TransactionsResource,
-              TransactionsFileResource,
-              UsersResource,
-            ],
-            branding: {
-              companyName: 'ACME Corporation',
-            },
-            ...locale,
+    AdminModule.createAdminAsync({
+      useFactory: () => ({
+        adminJsOptions: {
+          rootPath: '/admin',
+          resources: [
+            CreatorsResource,
+            TransactionsResource,
+            TransactionsFileResource,
+            UsersResource,
+          ],
+          branding: {
+            companyName: 'ACME Corporation',
           },
-          auth: {
-            authenticate,
-            cookieName: 'adminjs',
-            cookiePassword: 'secret',
-          },
-          sessionOptions: {
-            resave: true,
-            saveUninitialized: true,
-            secret: 'secret',
-          },
-        }),
+          ...locale,
+        },
+        auth: {
+          authenticate,
+          cookieName: 'adminjs',
+          cookiePassword: 'secret',
+        },
+        sessionOptions: {
+          resave: true,
+          saveUninitialized: true,
+          secret: 'secret',
+        },
       }),
-    ),
+    }),
     UsersModule,
     TransactionsModule,
+    CreatorsModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT),
       },
     }),
-    CreatorsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
