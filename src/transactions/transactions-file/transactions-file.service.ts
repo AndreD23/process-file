@@ -10,6 +10,7 @@ import { InjectQueue } from '@nestjs/bull';
 import * as fs from 'fs';
 import * as readline from 'node:readline';
 import { TransactionsService } from '../transactions.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class TransactionsFileService {
@@ -21,19 +22,16 @@ export class TransactionsFileService {
     private transactionsQueue: Queue,
   ) {}
 
+  /**
+   * Responsable for create transaction file row at database
+   * @param createTransactionFileDto
+   */
   async create(createTransactionFileDto: CreateTransactionFileDto) {
     // Creating a new transaction row with pending status
-    const transaction = await this.transactionFileModel.create({
-      filename: createTransactionFileDto.filename,
+    return await this.transactionFileModel.create({
+      path: createTransactionFileDto.path,
       status: TransactionFileStatus.PENDING,
     });
-
-    // Send to processing queue to be processed
-    await this.transactionsQueue.add({
-      transactionId: transaction.id,
-    });
-
-    return transaction;
   }
 
   findAll() {
@@ -45,6 +43,35 @@ export class TransactionsFileService {
   findOne(id: number) {
     return this.transactionFileModel.findOne({
       where: { id },
+    });
+  }
+
+  findPending() {
+    return this.transactionFileModel.findOne({
+      where: {
+        status: TransactionFileStatus.PENDING,
+      },
+    });
+  }
+
+  /**
+   * Function that checks records that are pending and queues them for processing
+   */
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async queueTransactions() {
+    const transactionPending = await this.findPending();
+    if (!transactionPending) {
+      return;
+    }
+
+    // Send to processing queue to be processed
+    await this.transactionsQueue.add({
+      transactionId: transactionPending.id,
+    });
+
+    // Set status to queued
+    await transactionPending.update({
+      status: TransactionFileStatus.QUEUED,
     });
   }
 
@@ -67,7 +94,7 @@ export class TransactionsFileService {
 
     // Find transaction file
     const transactionFilePath =
-      process.env.UPLOAD_DIR + transaction.get('filename');
+      process.env.UPLOAD_DIR + transaction.get('path');
     if (!fs.existsSync(transactionFilePath)) {
       await transaction.update({
         notes: 'Erro ao processar: arquivo não encontrado no sistema',
@@ -154,6 +181,10 @@ export class TransactionsFileService {
     });
   }
 
+  /**
+   * Process and Creates a single transaction row on database
+   * @param transaction
+   */
   async processTransaction(transaction) {
     // Random time processing
     await sleep(Math.random() * 10000);

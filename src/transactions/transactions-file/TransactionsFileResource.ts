@@ -20,6 +20,7 @@ export default {
         position: 2,
         availableValues: [
           { value: 'PENDING', label: 'Pendente' },
+          { value: 'QUEUED', label: 'Na fila para processamento' },
           { value: 'PROCESSING', label: 'Em processamento' },
           { value: 'DONE', label: 'Finalizado' },
           { value: 'ERROR', label: 'Processado com erro' },

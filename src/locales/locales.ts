@@ -84,6 +84,7 @@ const translations = {
         id: 'ID',
         filename: 'Nome do Arquivo',
         notes: 'Notas',
+        attachment: 'Anexo',
         ...commonProps,
       },
     },
@@ -135,12 +136,6 @@ const translations = {
 export default {
   locale: {
     language: 'pt-BR',
-    // availableLanguages: ['pt-BR'],
-    // translations: {
-    //   resources: {
-    //     'pt-BR': translations_pt_BR,
-    //   },
-    // },
     translations,
   },
 };

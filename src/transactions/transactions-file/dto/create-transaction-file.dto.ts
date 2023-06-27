@@ -1,3 +1,3 @@
 export class CreateTransactionFileDto {
-  filename: string;
+  path: string;
 }

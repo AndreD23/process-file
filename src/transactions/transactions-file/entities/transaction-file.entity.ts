@@ -3,6 +3,7 @@ import { DataTypes } from 'sequelize';
 
 export enum TransactionFileStatus {
   PENDING = 'PENDING',
+  QUEUED = 'QUEUED',
   PROCESSING = 'PROCESSING',
   DONE = 'DONE',
   ERROR = 'ERROR',
@@ -16,6 +17,7 @@ export class TransactionFile extends Model {
   @Column(
     DataTypes.ENUM(
       TransactionFileStatus.PENDING,
+      TransactionFileStatus.QUEUED,
       TransactionFileStatus.PROCESSING,
       TransactionFileStatus.DONE,
       TransactionFileStatus.ERROR,

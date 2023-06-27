@@ -37,7 +37,7 @@ export class TransactionsFileController {
   @UseInterceptors(FileInterceptor('file', { storage: defaultConfig }))
   create(@UploadedFile() file: Express.Multer.File) {
     return this.transactionFileService.create({
-      filename: file.filename,
+      path: file.filename,
     });
   }
 
