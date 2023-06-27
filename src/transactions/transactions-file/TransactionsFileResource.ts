@@ -74,7 +74,10 @@ export default {
         filename: 'filename',
         file: 'attachment',
       },
-      uploadPath: (record, filename) => `${record.id()}-${filename}`,
+      uploadPath: (record, filename) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        return `file-${uniqueSuffix}`;
+      },
       validation: {
         mimeTypes: ['text/plain'],
       },
