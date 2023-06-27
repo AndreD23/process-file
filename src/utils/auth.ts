@@ -9,9 +9,11 @@ export const checkPassword = async (user, password) => {
 };
 
 export const hasAdminPermission = (currentUser) => {
-  return currentUser && currentUser.role === 'admin';
+  return currentUser && ['DEVELOPER', 'ADMIN'].includes(currentUser.role);
 };
 
 export const hasManagerPermission = (currentUser) => {
-  return currentUser && ['admin', 'manager'].includes(currentUser.role);
+  return (
+    currentUser && ['DEVELOPER', 'ADMIN', 'MANAGER'].includes(currentUser.role)
+  );
 };

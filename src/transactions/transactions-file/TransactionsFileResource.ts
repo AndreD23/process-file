@@ -1,6 +1,7 @@
 import { TransactionFile } from './entities/transaction-file.entity';
 import { join } from 'path';
 import UploadProvider from '../../providers/UploadProvider';
+import { hasAdminPermission } from '../../utils/auth';
 
 const uploadFeature = require('@adminjs/upload');
 
@@ -12,6 +13,14 @@ export default {
   resource: TransactionFile,
   options: {
     navigation: 'Transações',
+    actions: {
+      edit: {
+        isAccessible: ({ currentAdmin }) => hasAdminPermission(currentAdmin),
+      },
+      delete: {
+        isAccessible: ({ currentAdmin }) => hasAdminPermission(currentAdmin),
+      },
+    },
     properties: {
       id: {
         position: 1,

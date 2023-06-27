@@ -1,4 +1,5 @@
 import { User } from './entities/user.entity';
+import { hasAdminPermission } from '../utils/auth';
 
 export default {
   resource: User,
@@ -7,6 +8,9 @@ export default {
       icon: 'User',
     },
     actions: {
+      list: {
+        isAccessible: ({ currentAdmin }) => hasAdminPermission(currentAdmin),
+      },
       resetPassword: {
         actionType: 'record',
         icon: 'Password',

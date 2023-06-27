@@ -1,4 +1,5 @@
 import { Transaction } from './entities/transaction.entity';
+import { hasAdminPermission } from '../utils/auth';
 
 export default {
   resource: Transaction,
@@ -6,6 +7,14 @@ export default {
     navigation: {
       name: 'Transações',
       icon: 'ArrowsHorizontal',
+    },
+    actions: {
+      edit: {
+        isAccessible: ({ currentAdmin }) => hasAdminPermission(currentAdmin),
+      },
+      delete: {
+        isAccessible: ({ currentAdmin }) => hasAdminPermission(currentAdmin),
+      },
     },
     properties: {
       id: { position: 1 },

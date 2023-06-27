@@ -13,6 +13,7 @@ import TransactionsFileResource from './transactions/transactions-file/Transacti
 import UsersResource from './users/UsersResource';
 import locale from './locales/locales';
 import { ScheduleModule } from '@nestjs/schedule';
+import { User } from './users/entities/user.entity';
 
 const { AdminModule } = require('@adminjs/nestjs');
 
@@ -23,16 +24,14 @@ AdminJS.default.registerAdapter({
   Database: AdminJSSequelize.Database,
 });
 
-const DEFAULT_ADMIN = {
-  email: process.env.ADMINJS_EMAIL,
-  password: process.env.ADMINJS_PASS,
-};
-
 const authenticate = async (email: string, password: string) => {
-  if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
-    return Promise.resolve(DEFAULT_ADMIN);
+  const user = await User.findOne({ where: { email } });
+
+  if (user && (await user.checkPassword(password))) {
+    return user;
   }
-  return null;
+
+  return false;
 };
 
 @Module({
@@ -61,18 +60,19 @@ const authenticate = async (email: string, password: string) => {
           branding: {
             companyName: 'ACME Corporation',
             withMadeWithLove: false,
+            logo: false,
           },
           ...locale,
         },
         auth: {
           authenticate,
-          cookieName: 'adminjs',
-          cookiePassword: 'secret',
+          cookieName: 'acmecorporation',
+          cookiePassword: process.env.SECRET,
         },
         sessionOptions: {
           resave: true,
           saveUninitialized: true,
-          secret: 'secret',
+          secret: process.env.SECRET,
         },
       }),
     }),
