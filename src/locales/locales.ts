@@ -130,6 +130,7 @@ const translations = {
       'Uma nova senha aleatória será gerada e atribuída para este usuário, para prosseguir clique no botão "Redefinir senha".',
     newPasswordMessage: 'Nova senha "{{newPassword}}" atribuída ao usuário.',
     newPasswordMessageError: 'Erro ao redefinir a senha automaticamente.',
+    welcomeOnBoard_subtitle: 'Utilize o menu lateral esquerdo para navegação.',
   },
 };
 

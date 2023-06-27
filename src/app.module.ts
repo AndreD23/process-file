@@ -51,6 +51,9 @@ const authenticate = async (email: string, password: string) => {
       useFactory: () => ({
         adminJsOptions: {
           rootPath: '/admin',
+          dashboard: {
+            component: AdminJS.default.bundle('./components/dashboard'),
+          },
           resources: [
             CreatorsResource,
             TransactionsResource,
