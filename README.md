@@ -9,7 +9,7 @@ The system has an administrative panel so that the user can send a transaction f
 
 ---
 
-## Tecnologias
+## Technologies
 
 ### Backend
 
@@ -26,7 +26,7 @@ As a front end, the AdminJS package was used, which uses ReacJS under the hood. 
 The version had to be manually set to 6.8.7. Version ^7.0.0 has incompatibilities with NestJS,
 as this latest version of AdminJS has been converted to ESM, while NestJS remains CJS (as of this project's creation). <br /> <br />
 
-### Banco de dados
+### Databases
 
 As a database, the project is configured with Postgres. <br /> <br />
 
@@ -42,7 +42,7 @@ When accessing PGAdmin, just navigate between the items to view the tables: <br 
             - Tables
     
 
-### Filas
+### Queues
 
 For queue processing, Redis was used to temporarily store the ids of the files to be processed. <br /> <br />
 
@@ -56,9 +56,9 @@ The project and its environment are configured to run inside Docker containers, 
 
 ---
 
-## Ambiente
+## Environment
 
-### Subindo o ambiente
+### Up the environment
 
 To mount and upload the environment, just follow the steps below:  <br /> <br />
 
@@ -86,7 +86,7 @@ docker-compose exec app npm run db:seed
 
 <br />
 
-### Acessando o projeto
+### Accessing the project
 
 You can access the system through the links listed below: <br />
 
@@ -118,7 +118,7 @@ If the PGAdmin panel asks for **docker_postgres** password, just enter `secret`<
 
 ---
 
-## Execução do Projeto
+## Project Execution
 
 To test the sending of transactions via the administrative panel form, just follow these steps:  <br />
 - Access the administrative panel.
