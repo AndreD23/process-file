@@ -1,10 +1,10 @@
 # process-file - ACME Corp <br />
 
-Sistema de processamento de transações via arquivo. <br /> <br />
-Este é um desafio técnico, que tem como base o envio de um arquivo de transações,
-que deverá ser processado e normalizado no banco de dados. <br /><br />
-O sistema possui um painel administrativo para que o usuário possa enviar um arquivo de transações
-via formulário. <br />
+File transaction processing system. <br /> <br />
+
+This is a technical challenge, which is based on sending a transaction file, which must be processed and normalized in the database. <br /><br />
+
+The system has an administrative panel so that the user can send a transaction file via form. <br />
 
 
 ---
@@ -12,19 +12,27 @@ via formulário. <br />
 ## Tecnologias
 
 ### Backend
-O projeto foi desenvolvido a utilizar Nest.js, um framework versátil para a criação de servidores escaláveis. <br /> <br />
-A comunicação é feita a utilizar API REST com o sistema. <br /> <br />
-Foi configurado Sequelize como ORM do sistema, por facilidade de implementação. <br /> <br />
+
+The project was developed using Nest.js, a versatile framework for creating scalable servers. <br /> <br />
+
+The communication is made using REST API with the system. <br /> <br />
+
+Sequelize was configured as the system's ORM, for ease of implementation. <br /> <br />
 
 ### Frontend
-Como front end, foi utilizado o pacote do AdminJS, que utiliza ReacJS por debaixo dos panos. <br /> <br />
-A versão teve que ser configurada manualmente para 6.8.7, pois a versão ^7.0.0 apresenta incompatibilidades com NestJS,
-pois esta versão mais recente do AdminJS foi convertida para ESM, enquanto NestJS se mantém como CJS (até o momento da criação deste projeto). <br /> <br />
+
+As a front end, the AdminJS package was used, which uses ReacJS under the hood. <br /> <br />
+
+The version had to be manually set to 6.8.7. Version ^7.0.0 has incompatibilities with NestJS,
+as this latest version of AdminJS has been converted to ESM, while NestJS remains CJS (as of this project's creation). <br /> <br />
 
 ### Banco de dados
-Como banco de dados, o projeto está configurado com o Postgres. <br /> <br />
-Poderá verificar todo o sistema através do PGAdmin, configurado e pronto para ser acessado. <br /> <br />
-Ao acessar o PGAdmin, basta navegar entre os itens para visualizar as tabelas: <br />
+
+As a database, the project is configured with Postgres. <br /> <br />
+
+You can check the entire system through PGAdmin, configured and ready to be accessed. <br /> <br />
+
+When accessing PGAdmin, just navigate between the items to view the tables: <br />
 - docker_postgres_group
   - docker_postgres
     - Databases
@@ -32,39 +40,46 @@ Ao acessar o PGAdmin, basta navegar entre os itens para visualizar as tabelas: <
         - Schemas
           - public
             - Tables
-   
+    
+
 ### Filas
-Para o processamento de filas, foi utilizado o Redis para o armazenamento temporário dos ids dos arquivos a serem processados. <br /> <br />
-O backend NestJS está configurado com BullJS para a comunicação com o Redis e todo o processamento dos Jobs. <br /> <br />
-O sistema possui um scheduler para verificar e colocar os itens na fila de processamento. <br /> <br />
+
+For queue processing, Redis was used to temporarily store the ids of the files to be processed. <br /> <br />
+
+The NestJS backend is configured with BullJS for communication with Redis and all Job processing. <br /> <br />
+
+The system has a scheduler to check and queue items for processing. <br /> <br />
 
 ### Docker
-O projeto e o seu ambiente está configurado para ser rodado dentro de containeres Docker, com o facilitador Docker Compose.
+
+The project and its environment are configured to run inside Docker containers, with the Docker Compose enabler.
 
 ---
 
 ## Ambiente
 
 ### Subindo o ambiente
-Para montar e subir o ambiente, basta seguir os passos abaixo:  <br /> <br />
 
-1. Clonar o repositório: <br />
+To mount and upload the environment, just follow the steps below:  <br /> <br />
+
+1. Clone the repository: <br />
    `git clone https://github.com/AndreD23/process-file.git`
-2. Entrar na pasta do projeto: <br />
+2. Enter the project folder: <br />
    `cd process-file`
-3. Gerar o arquivo .env: <br />
+3. Generate the .env file: <br />
    `cp .env.example .env`
-4. Executar docker compose para subir os serviços: <br />
+4. Run docker compose to load the services: <br />
    `docker-compose up --build`
 
 <br />
-Com isso, a aplicação estará rodando e escutando em localhost. <br /> <br />
+With that, the application will be running and listening on localhost. <br /> <br />
 
 ### Seeding de Usuários
 
-Na primeira execução do projeto, não há usuários cadatrados. <br />
-Para testar, poderá rodar o seed do projeto para carregar usuários padrão no sistema
-através do comando abaixo:
+In the first execution of the project, there are no registered users. <br />
+
+To test it out, you can run the project seed to load standard users into the system.
+through the command below:
 ```
 docker-compose exec app npm run db:seed
 ```
@@ -73,27 +88,30 @@ docker-compose exec app npm run db:seed
 
 ### Acessando o projeto
 
-Poderá acessar o sistema através dos links listados abaixo:<br />
+You can access the system through the links listed below: <br />
 
-- Hello World do NestJS: http://localhost:3000/ <br /> <br />
+- Hello World from NestJS: http://localhost:3000/ <br /> <br />
   
-- Painel Administrativo: http://localhost:3000/admin  <br /> 
-  Usuários para login:<br />
+- Admin Panel: http://localhost:3000/admin  <br /> 
+  Login Users:<br />
   - Admin:
     - E-mail: `admin@example.com`
-    - Senha: `secret` 
+    - Pass: `secret` 
   - Manager:
      - E-mail: `manager@example.com`
-     - Senha: `secret`
+     - Pass: `secret`
   - Developer:
      - E-mail: `dev@example.com`
-     - Senha: `secret` <br /><br />
+     - Pass: `secret` <br /><br />
    
-- Banco de dados PGAdmin: http://localhost:8000/  <br />
+- Database with PGAdmin: http://localhost:8000/  <br />
   - E-mail: `admin@example.com`
-  - Senha: `secret` <br /><br />
-   
-- Documentação da API com Swagger: http://localhost:3000/api  <br />
+  - Pass: `secret` <br /><br />
+<br/ >
+
+If the PGAdmin panel asks for **docker_postgres** password, just enter `secret`<br /><br />
+
+- API documentation with Swagger: http://localhost:3000/api  <br />
 
 
 
@@ -102,42 +120,34 @@ Poderá acessar o sistema através dos links listados abaixo:<br />
 
 ## Execução do Projeto
 
-Para testar o envio de transações via formulário do painel administrativo, basta seguir os seguintes passos:  <br />
-- Acessar o painel administrativo.
-- Fazer login no sistema.
-- Navegar até **Arquivo de Transações**
-- Clicar no botão **+ Criar novo**
-- Preencher o formulário com:
+To test the sending of transactions via the administrative panel form, just follow these steps:  <br />
+- Access the administrative panel.
+- Log in to the system.
+- Navigate to **Arquivo de Transações**
+- Click on the button **+ Criar novo**
+- Fill in the form with:
   - Situação **Pendente**
-  - Notas: deixar em branco
-  - Anexo: selecionar o arquivo em **examples/sales.txt**
+  - Notas: leave blank
+  - Anexo: select the file in **examples/sales.txt**
 
 <br /> <br />
 
-Para testar a API de envio de transações do projeto, basta seguir um dos três passos:  <br />
-1. Utilizar o arquivo *api.http* da pasta raiz do projeto. <br />
-   Algumas IDEs possuem plugins para testes de requisição, e poderá utilizar este arquivo para executar os testes. <br />
-   Basta rodar o POST denominado "Send Transaction File" para ver seu funcionamento. <br /> <br />
+To test the project's transaction submission API, just follow one of the three steps: <br />
+1. Use the *api.http* file from the project's root folder. <br />
+   Some IDEs have plugins for request tests, and you can use this file to run the tests. <br />
+   Just run the POST called "Send Transaction File" to see how it works. <br /> <br />
    
-2. Disparar a requisição via Postman. Para isso, basta preencher com os seguintes dados: <br />
+2. Trigger the request via Postman. To do this, simply fill in the following data: <br />
 POST: http://localhost:3000/transactions-file <br />
 Body:
-   - selecionar `form-data`
-   - Key `file` como tipo File.
-   - Value selecionar o arquivo em **examples/sales.txt** <br /> <br />
+   - Select `form-data`
+   - Key `file` with File type.
+   - Value select file in **examples/sales.txt** <br /> <br />
    
-3. Disparar a requisição via documentação da API com Swagger. Para isso, basta seguir os seguintes passos:  <br />
-    - Navegar até a categoria *transactions-file* <br />
-    - Expandir `POST /transactions-file`
-    - Clicar em *Try it out*
-    - Em *file*, selecionar o arquivo em  *examples/sales.txt*
-    - Clicar em *Execute*
-
-
-
-
-
-
-
-
-
+3. Trigger the request via API documentation with Swagger. To do this, just follow these steps:  <br />
+    - Navigate to category *transactions-file* <br />
+    - Expand `POST /transactions-file`
+    - Click on *Try it out*
+    - In *file*, select the file in *examples/sales.txt*
+    - Clico on *Execute*
+    
