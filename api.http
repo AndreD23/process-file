@@ -9,13 +9,18 @@ Content-Type: application/json
     "name": "André Dorneles"
 }
 
-
 ### Get Transactions
 GET http://localhost:3000/transactions
 
 ### Get Single Transaction
 GET http://localhost:3000/transactions-file/5
 
-### Create Transaction
+### Send Transaction File
 POST http://localhost:3000/transactions-file
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="sales.txt"
+
+< ./examples/sales.txt
+--WebAppBoundary--
