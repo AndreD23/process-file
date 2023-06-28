@@ -17,7 +17,7 @@ export class TransactionsService {
    * @param createTransactionDTO
    */
   create(createTransactionDTO: CreateTransactionDto) {
-    this.creatorService.updateAccountBallance(
+    this.creatorService.updateAccountBalance(
       createTransactionDTO.type,
       createTransactionDTO.seller,
       createTransactionDTO.value,

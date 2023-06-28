@@ -24,28 +24,38 @@ export class TransactionsFileService {
 
   /**
    * Responsable for create transaction file row at database
-   * @param createTransactionFileDto
+   * @param filePath Name of the file in UPLOAD_DIR env
    */
-  async create(createTransactionFileDto: CreateTransactionFileDto) {
+  async create(filePath: string) {
     // Creating a new transaction row with pending status
     return await this.transactionFileModel.create({
-      path: createTransactionFileDto.path,
+      path: filePath,
       status: TransactionFileStatus.PENDING,
     });
   }
 
+  /**
+   * Get all transaction files of the database
+   */
   findAll() {
     return this.transactionFileModel.findAll({
       order: [['createdAt', 'DESC']],
     });
   }
 
+  /**
+   * Get one transaction file of the database by id
+   * @param id Transaction File Id at database
+   */
   findOne(id: number) {
     return this.transactionFileModel.findOne({
       where: { id },
     });
   }
 
+  /**
+   * Search for one pending transaction file at database
+   */
   findPending() {
     return this.transactionFileModel.findOne({
       where: {

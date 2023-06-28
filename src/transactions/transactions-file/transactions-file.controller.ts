@@ -5,11 +5,14 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
+  Body,
 } from '@nestjs/common';
 import { TransactionsFileService } from './transactions-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import 'dotenv/config';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { CreateTransactionFileDto } from './dto/create-transaction-file.dto';
 
 // Upload folder config
 // Handle location folder and file name to avoid files with same name
@@ -21,6 +24,7 @@ const defaultConfig = diskStorage({
   },
 });
 
+@ApiTags('transactions-file')
 @Controller('transactions-file')
 export class TransactionsFileController {
   constructor(
@@ -31,14 +35,17 @@ export class TransactionsFileController {
    * Create a file register
    * Insert at table transaction_file
    * Insert file at UPLOAD_DIR env folder
+   * @param data
    * @param file
    */
   @Post()
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', { storage: defaultConfig }))
-  create(@UploadedFile() file: Express.Multer.File) {
-    return this.transactionFileService.create({
-      path: file.filename,
-    });
+  create(
+    @Body() data: CreateTransactionFileDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.transactionFileService.create(file.filename);
   }
 
   @Get()
